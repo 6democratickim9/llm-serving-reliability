@@ -1,0 +1,32 @@
+[
+  {
+    "concurrency": 1,
+    "requests": 12,
+    "successes": 12,
+    "error_rate": 0.0,
+    "p50_ms": 1115.84,
+    "p95_ms": 1166.52,
+    "requests_per_sec": 0.89,
+    "output_tokens_per_sec": 102.79
+  },
+  {
+    "concurrency": 2,
+    "requests": 12,
+    "successes": 12,
+    "error_rate": 0.0,
+    "p50_ms": 2260.91,
+    "p95_ms": 2320.27,
+    "requests_per_sec": 0.88,
+    "output_tokens_per_sec": 102.23
+  },
+  {
+    "concurrency": 4,
+    "requests": 12,
+    "successes": 12,
+    "error_rate": 0.0,
+    "p50_ms": 4734.5,
+    "p95_ms": 5047.37,
+    "requests_per_sec": 0.82,
+    "output_tokens_per_sec": 94.93
+  }
+]

@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "kind": "cold-warm",
+  "started_at": "2026-11-03T14:22:51.859334+00:00",
+  "status": "completed",
+  "configuration": {
+    "model": "llama3.2:1b",
+    "base_url": "http://127.0.0.1:11434",
+    "prompt": "Explain Kubernetes readiness probes in three sentences.",
+    "num_predict": 128,
+    "seed": 42,
+    "temperature": 0,
+    "num_ctx": 4096,
+    "timeout": 120,
+    "repeats": 3,
+    "output_dir": "labs/01-ollama/results/verified",
+    "notes": "Apple Silicon local desktop. Other applications may be active; power mode and thermal state not controlled. No cloud resources."
+  },
+  "request_payload": {
+    "model": "llama3.2:1b",
+    "prompt": "Explain Kubernetes readiness probes in three sentences.",
+    "stream": false,
+    "keep_alive": "10m",
+    "options": {
+      "temperature": 0,
+      "seed": 42,
+      "num_predict": 128,
+      "num_ctx": 4096
+    }
+  },
+  "retries": 0,
+  "runs": [
+    {
+      "repeat": 1,
+      "cold": {
+        "latency_ms": 3869.2539170151576,
+        "total_ms": 3863.52225,
+        "load_ms": 1917.695917,
+        "prompt_eval_ms": 77.185,
+        "eval_ms": 1857.697,
+        "output_tokens": 116,
+        "prompt_tokens": 34,
+        "generation_tokens_per_sec": 62.442906458911224
+      },
+      "warm": {
+        "latency_ms": 1910.2504589827731,
+        "total_ms": 1906.825417,
+        "load_ms": 1.364542,
+        "prompt_eval_ms": 17.918,
+        "eval_ms": 1881.038,
+        "output_tokens": 116,
+        "prompt_tokens": 34,
+        "generation_tokens_per_sec": 61.668079007441634
+      }
+    },
+    {
+      "repeat": 2,
+      "cold": {
+        "latency_ms": 2680.231250007637,
+        "total_ms": 2675.91375,
+        "load_ms": 836.7585,
+        "prompt_eval_ms": 160.622,
+        "eval_ms": 1637.859,
+        "output_tokens": 116,
+        "prompt_tokens": 34,
+        "generation_tokens_per_sec": 70.82416740390961
+      },
+      "warm": {
+        "latency_ms": 1945.418208022602,
+        "total_ms": 1942.683667,
+        "load_ms": 1.2865,
+        "prompt_eval_ms": 14.79,
+        "eval_ms": 1918.458,
+        "output_tokens": 116,
+        "prompt_tokens": 34,
+        "generation_tokens_per_sec": 60.465227802745744
+      }
+    },
+    {
+      "repeat": 3,
+      "cold": {
+        "latency_ms": 2775.3569170017727,
+        "total_ms": 2770.766208,
+        "load_ms": 1095.823708,
+        "prompt_eval_ms": 67.796,
+        "eval_ms": 1593.944,
+        "output_tokens": 116,
+        "prompt_tokens": 34,
+        "generation_tokens_per_sec": 72.77545509754421
+      },
+      "warm": {
+        "latency_ms": 2043.1331660365686,
+        "total_ms": 2038.979958,
+        "load_ms": 1.556208,
+        "prompt_eval_ms": 15.605,
+        "eval_ms": 2018.009,
+        "output_tokens": 116,
+        "prompt_tokens": 34,
+        "generation_tokens_per_sec": 57.48239973161666
+      }
+    }
+  ],
+  "finished_at": "2026-11-03T14:23:13.019080+00:00",
+  "error": null
+}

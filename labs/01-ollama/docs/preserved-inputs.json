@@ -1,0 +1,11 @@
+{
+  "purpose": "SHA-256 recorded before implementation; all matched after implementation. This is provenance, not benchmark data.",
+  "files": {
+    "benchmark.sh": "00729075123493145fe3cb05e8127cdb254853643cc89c2a0bfd2ca28d16349f",
+    "concurency.py": "b1fb52078b8572831c5cfe0cf3712ba81b4bd96a280b8d5fa8205a1376d327b8",
+    "results/cold.json": "1fe8c107520550352c47cb730efa894e0a6d0da9cb1f23b3255684ed2a9c2c71",
+    "results/concurrency.json": "987927640abbab2af4aeee7e371d7cc6d256abc8f0d02629716f35720ab3214d",
+    "results/results.txt": "a7fc2b22bc0f9ac7dae83b16eb95f63ac3f65340d4c7df87f2365b51d0b85bcd",
+    "results/warm.json": "69a89265a3f5f490338d1de44575424d7fdeef8cc7355bc7d66742febbf29e64"
+  }
+}

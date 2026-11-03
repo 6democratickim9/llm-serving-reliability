@@ -1,0 +1,6 @@
+__pycache__/
+*.py[cod]
+.venv/
+.DS_Store
+# Generated local experiments; curated evidence is kept under results/verified/.
+labs/01-ollama/results/runs/
