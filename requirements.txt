@@ -1,0 +1,2 @@
+# Async HTTP server/client with an end-to-end upstream deadline.
+aiohttp==3.14.5

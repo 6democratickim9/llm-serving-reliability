@@ -24,7 +24,10 @@ the system rather than declare it production-ready.
 - [Experiment guide](labs/01-ollama/README.md), [methodology](labs/01-ollama/docs/methodology.md),
   [analysis](labs/01-ollama/docs/analysis.md), and [customer PoC report](labs/01-ollama/docs/poc-report.md).
 
-Current data path:
+**Milestone 2 is in progress:** [gateway design and engineering insights](labs/02-gateway/README.md).
+The gateway draft has not yet passed integration validation.
+
+Current verified data path:
 
 ```text
 Python load generator -> localhost:11434/api/generate -> Ollama / local model
