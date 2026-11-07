@@ -14,9 +14,12 @@ class GatewayTests(unittest.IsolatedAsyncioTestCase):
         self.mode = "ok"
         self.received = None
         self.release = asyncio.Event()
-
+        self.entered = asyncio.Event()
+        self.upstream_calls = 0
         async def fake_ollama(request):
             self.received = await request.json()
+            self.upstream_calls += 1
+            self.entered.set()
 
             if self.mode == "slow":
                 await self.release.wait()
@@ -95,3 +98,81 @@ class GatewayTests(unittest.IsolatedAsyncioTestCase):
         self.mode = "invalid"
         response = await self.generate()
         await self.assert_error(response, 502, "upstream_invalid_json")
+
+    async def test_capacity_rejection_and_recovery(self):
+        self.mode = "slow"
+
+        # Give the test time to inspect rejection before the upstream deadline.
+        client = TestClient(TestServer(create_app(Config(
+            upstream=str(self.upstream.make_url("/")).rstrip("/"),
+            max_inflight=1,
+            timeout=5,
+        ))))
+        await client.start_server()
+
+        payload = {
+            "model": "llama3.2:1b",
+            "prompt": "test prompt",
+            "stream": False,
+        }
+
+        async def send():
+            return await client.post("/api/generate", json=payload)
+
+        first = asyncio.create_task(send())
+        try:
+            await asyncio.wait_for(self.entered.wait(), timeout=2)
+
+            second = await send()
+            await self.assert_error(second, 429, "capacity_exceeded")
+            self.assertEqual(second.headers["Retry-After"], "1")
+            self.assertEqual(self.upstream_calls, 1)
+
+            self.release.set()
+            first_response = await first
+            self.assertEqual(first_response.status, 200)
+            await first_response.read()
+
+            third = await send()
+            self.assertEqual(third.status, 200)
+            await third.read()
+            self.assertEqual(self.upstream_calls, 2)
+        finally:
+            self.release.set()
+            await asyncio.gather(first, return_exceptions=True)
+            await client.close()
+
+    async def test_timeout_releases_capacity(self):
+        self.mode = "slow"
+
+        failed = await self.generate()
+        await self.assert_error(failed, 504, "upstream_timeout")
+
+        # Let the fake backend finish; verify gateway admission recovers.
+        self.release.set()
+        self.mode = "ok"
+
+        recovered = await self.generate()
+        self.assertEqual(recovered.status, 200)
+        self.assertTrue((await recovered.json())["done"])
+
+    async def test_connection_failure_releases_capacity(self):
+        original_request = aiohttp.ClientSession.request
+        upstream_url = str(self.upstream.make_url("/api/generate"))
+
+        def request_with_failure(session, method, url, **kwargs):
+            if str(url) == upstream_url:
+                raise aiohttp.ClientConnectionError("test failure")
+            return original_request(session, method, url, **kwargs)
+
+        with patch(
+            "gateway.server.aiohttp.ClientSession.request",
+            new=request_with_failure,
+        ):
+            failed = await self.generate()
+
+        await self.assert_error(failed, 503, "upstream_unavailable")
+
+        recovered = await self.generate()
+        self.assertEqual(recovered.status, 200)
+        self.assertTrue((await recovered.json())["done"])

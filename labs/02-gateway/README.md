@@ -113,5 +113,53 @@ allows the gateway to receive the request and exercise its error handling.
 ### Remaining validation
 
 - Full repository checks after integrating the gateway tests.
-- Admission control and health-check behavior present in the draft.
+- Admission limits greater than one, cancellation behavior, and health checks.
 - Direct-versus-gateway performance comparison under an equivalent workload.
+
+
+## Day 2: Admission control and recovery
+
+### Objective
+
+Limit concurrent upstream requests and reject excess traffic without queuing.
+With `--max-inflight 1`, one request can await Ollama at a time per gateway
+process. This is a concurrency limit, not a requests-per-second limit or an
+Ollama parallelism setting. Direct requests to Ollama bypass this control.
+
+### Manual observations
+
+The project owner sent two concurrent requests through the local gateway:
+
+| Request | HTTP status | Client-observed latency |
+|---|---:|---:|
+| A | 200 | 2964.5 ms |
+| B | 429 | 30.8 ms |
+
+The rejected request returned `capacity_exceeded` and `Retry-After: 1`.
+A subsequent request returned HTTP 200 with `done: true`, demonstrating
+successful admission after the earlier request completed.
+
+These are individual observations, not latency guarantees or capacity estimates.
+`Retry-After: 1` advises a retry delay; it does not reserve capacity or guarantee
+acceptance after one second.
+
+### Automated validation
+
+Seven gateway tests passed. The three tests added on Day 2 verify:
+
+- An overlapping request receives 429 and never reaches the upstream server;
+  a new request succeeds after the accepted request completes.
+- A request that times out releases its gateway slot.
+- An upstream connection failure releases its gateway slot.
+
+The overlap test waits for the first request to reach the controlled upstream
+before sending the second request, avoiding dependence on arbitrary sleeps.
+
+### Engineering insight and limitation
+
+Admission control must recover after both success and failure. Releasing the
+slot in `finally` prevents failed requests from permanently consuming capacity.
+
+A released gateway slot does not prove that Ollama stopped computing after a
+timeout. Therefore, the gateway counter alone cannot guarantee the number of
+active backend generations. Cancellation behavior needs separate investigation.
