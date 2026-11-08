@@ -1,6 +1,7 @@
 import asyncio
 import unittest
 from unittest.mock import patch
+import json
 
 import aiohttp
 from aiohttp import web
@@ -176,3 +177,93 @@ class GatewayTests(unittest.IsolatedAsyncioTestCase):
         recovered = await self.generate()
         self.assertEqual(recovered.status, 200)
         self.assertTrue((await recovered.json())["done"])
+
+    async def test_health_does_not_call_upstream(self):
+        with patch(
+            "gateway.server.Gateway.upstream",
+            side_effect=RuntimeError("Health must not call upstream"),
+        ) as upstream:
+            response = await self.client.get("/healthz")
+
+        self.assertEqual(response.status, 200)
+        self.assertEqual(await response.json(), {"alive": True})
+        upstream.assert_not_called()
+
+    async def test_ready_when_model_is_installed(self):
+        with patch(
+            "gateway.server.Gateway.upstream",
+            return_value={
+                "models": [{"name": "llama3.2:1b"}]
+            },
+        ) as upstream:
+            response = await self.client.get("/readyz")
+
+        self.assertEqual(response.status, 200)
+        body = await response.json()
+        self.assertEqual(body["ready"], True)
+
+        upstream.assert_awaited_once_with(
+            "/api/tags",
+            timeout=2,
+        )
+    async def test_ready_fails_when_model_is_missing(self):
+        with patch(
+            "gateway.server.Gateway.upstream",
+            return_value={"models": []},
+        ):
+            response = await self.client.get("/readyz")
+
+        self.assertEqual(response.status, 503)
+        body = await response.json()
+        self.assertEqual(body["error"]["code"], "model_not_available")
+
+    async def test_readiness_recovers_without_restart(self):
+        with patch(
+            "gateway.server.Gateway.upstream",
+            side_effect=[
+                {"models": []},
+                {"models": [{"name": "llama3.2:1b"}]},
+            ],
+        ) as upstream:
+            first = await self.client.get("/readyz")
+            self.assertEqual(first.status, 503)
+            await first.read()
+
+            second = await self.client.get("/readyz")
+            self.assertEqual(second.status, 200)
+            await second.read()
+
+        self.assertEqual(upstream.await_count, 2)
+
+    async def test_ready_when_upstream_is_unavailable(self):
+        original_request = aiohttp.ClientSession.request
+        upstream_url = str(self.upstream.make_url("/api/tags"))
+
+        def request_with_failure(session, method, url, **kwargs):
+            if str(url) == upstream_url:
+                raise aiohttp.ClientConnectionError("test failure")
+            return original_request(session, method, url, **kwargs)
+
+        with patch(
+            "gateway.server.aiohttp.ClientSession.request",
+            new=request_with_failure,
+        ):
+            response = await self.client.get("/readyz")
+
+        await self.assert_error(response, 503, "upstream_unavailable")
+
+    async def test_request_id_matches_log(self):
+        with self.assertLogs("gateway", level="INFO") as captured:
+            response = await self.client.get("/healthz")
+            await response.read()
+
+        self.assertEqual(response.status, 200)
+        self.assertEqual(len(captured.records), 1)
+
+        entry = json.loads(captured.records[0].getMessage())
+        self.assertEqual(
+            entry["request_id"],
+            response.headers["X-Request-ID"],
+        )
+        self.assertEqual(entry["route"], "/healthz")
+        self.assertEqual(entry["status"], 200)

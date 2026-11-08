@@ -1,8 +1,9 @@
 # Milestone 2: Local inference gateway
 
-Status: forwarding and error handling passed four automated tests, with manual
-local checks for real Ollama success, timeout, and connection failure.
-The broader gateway draft is not fully validated; see remaining validation below.
+Status: local forwarding, failure handling, admission/recovery, health/readiness,
+and response/log correlation have automated coverage. The full suite contains
+18 benchmark tests and 13 gateway tests. Manual local observations are recorded
+separately below; they are not controlled performance comparisons.
 
 ## Customer problem
 
@@ -112,8 +113,7 @@ allows the gateway to receive the request and exercise its error handling.
 
 ### Remaining validation
 
-- Full repository checks after integrating the gateway tests.
-- Admission limits greater than one, cancellation behavior, and health checks.
+- Admission limits greater than one, cancellation behavior, and readiness probe timeout/malformed-response cases.
 - Direct-versus-gateway performance comparison under an equivalent workload.
 
 
@@ -163,3 +163,67 @@ slot in `finally` prevents failed requests from permanently consuming capacity.
 A released gateway slot does not prove that Ollama stopped computing after a
 timeout. Therefore, the gateway counter alone cannot guarantee the number of
 active backend generations. Cancellation behavior needs separate investigation.
+
+## Day 3: Health, readiness, and request tracing
+
+See the [current architecture and sequence diagram](../../docs/architecture.md)
+and the [root architecture overview](../../README.md#current-local-architecture).
+
+Project-owner manual checks on 2026-11-08 produced these results:
+
+| Configured upstream | `/healthz` | `/readyz` |
+|---|---|---|
+| Unavailable local port 11435 | 200, `alive: true` | 503, `upstream_unavailable` |
+| Local Ollama on port 11434 with configured model installed | 200, `alive: true` | 200, `ready: true` |
+
+Readiness is defined by the check's logic, not by the endpoint name. The current
+check verifies reachability and model installation, not residency or generation.
+These are owner-reported manual observations, not independently rerun measurements.
+### Automated validation
+
+Six tests added on Day 3 verify:
+
+| Scenario | Verified behavior |
+|---|---|
+| Liveness request | 200 with `alive: true`; upstream helper is never called |
+| Configured model installed | 200 with `ready: true`; `/api/tags` is queried once |
+| Configured model missing | 503 with `model_not_available` |
+| Model list changes from missing to installed | Successive probes return 503 then 200 without restarting the gateway |
+| Upstream connection failure | 503 with `upstream_unavailable`; response and error-body request IDs match |
+| Request logging | Response `X-Request-ID` matches the structured log, including correct route and status |
+
+Model-list scenarios mock the upstream helper. The connection-failure test injects
+an HTTP client error specifically for the upstream model-list URL. These tests
+verify gateway behavior, not actual model installation or backend cancellation.
+
+### Manual request tracing
+
+The project owner matched response header `X-Request-ID` and log `request_id`:
+`e60d5a34a0ef47d49a392e03190e3baa`. The log recorded `GET /healthz`, status 200,
+and approximately 0.100 ms of gateway processing time. This is one reported
+observation, not a latency guarantee or client round-trip measurement.
+
+### Operational interpretation
+
+- Readiness is checked on demand. No background probe scheduler exists in this
+  deployment; a future Kubernetes readiness probe must be configured explicitly.
+- Installing the configured model is reflected on the next readiness request.
+  Changing the configured model name requires restarting with the new CLI value.
+- Readiness does not gate `/api/generate` in this implementation. Generation is
+  handled separately and may fail even after a successful readiness response.
+- Liveness stays independent of Ollama so dependency failure is not mistaken for
+  failure of the gateway itself. Readiness success does not imply a warm model.
+- Request IDs correlate a response with one gateway log entry. This is not
+  distributed tracing across Ollama, nor proof of ID uniqueness under every workload.
+
+### Reproduce automated checks
+
+From the repository root, after installing `requirements.txt` in `.venv`:
+
+```bash
+make check PYTHON=.venv/bin/python
+```
+
+The complete verification runs 31 tests, the legacy shell script syntax check,
+and `git diff --check`. Probe deadline behavior, malformed model metadata, and
+privacy assertions on inference logs remain candidates for further tests.

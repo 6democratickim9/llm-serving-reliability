@@ -2,11 +2,64 @@
 
 ## Current system boundary
 
-A Python standard-library client sends non-streaming requests directly to a local
-Ollama process. It records transport outcomes and Ollama's own timing counters.
-There is no gateway, Kubernetes workload, metrics backend, autoscaler or GPU cloud
-resource in this milestone. It does not measure TTFT (time to first token), streaming
-inter-token latency, GPU utilization, server queue length or user-perceived application latency.
+The local deployment has two processes: an aiohttp gateway on port 8080 and
+Ollama on port 11434. Ollama runs the installed model; the gateway validates and
+forwards non-streaming requests, controls admission, bounds upstream waiting, and
+maps failures to HTTP errors. The original standard-library benchmark can still
+call Ollama directly, bypassing gateway controls.
+
+| Module | Responsibility |
+|---|---|
+| `gateway/__main__.py` | Parse CLI configuration, configure logging, start the HTTP server |
+| `gateway/server.py`: `create_app` | Register routes/middleware and manage one shared HTTP client session |
+| `Gateway.generate` | Validate input, reserve a slot, forward generation, release the slot in `finally` |
+| `Gateway.upstream` | Apply an upstream deadline, read a bounded response, validate JSON, map failures |
+| `Gateway.diagnostic` | Query model metadata and implement the readiness check |
+| Audit middleware | Attach request IDs and log route, status and duration without prompts or generated text |
+| `tests/test_gateway.py` | Use a controlled HTTP upstream and injected failures to verify gateway behavior |
+
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant G as Gateway :8080
+    participant O as Ollama :11434
+    C->>G: POST /api/generate
+    alt Admission limit reached
+        G-->>C: 429 capacity_exceeded
+    else Slot available
+        G->>G: active += 1
+        G->>O: Forward generation request
+        alt Valid completed response
+            O-->>G: Generated response
+            G->>G: Release slot in finally
+            G-->>C: 200 + response + X-Request-ID
+        else Connection failure / timeout / invalid response
+            G->>G: Map error; release slot in finally
+            G-->>C: 503 / 504 / 502 + request ID
+        end
+    end
+```
+
+The deadline covers the upstream operation, not the complete client upload and
+response delivery. A timeout closes the gateway's wait but does not prove that
+backend computation stopped. Admission is per gateway process; direct backend
+requests and other gateway processes do not share this counter.
+
+### Health and readiness contract
+
+| Route | What it checks | What success does not prove |
+|---|---|---|
+| `/healthz` | Gateway can respond to HTTP | Ollama is available |
+| `/readyz` | Ollama `/api/tags` responds and the configured model is installed | Model is warm, spare admission capacity exists, or generation will succeed |
+
+The readiness probe does not run inference. This avoids generating tokens on each
+probe, at the cost of a weaker readiness guarantee. Connection failure currently
+maps to 503 and a probe deadline to 504. A missing configured model maps to 503.
+
+No Kubernetes workload, metrics backend, autoscaler, or cloud GPU is deployed.
+Current experiments do not measure TTFT, inter-token latency, GPU utilization,
+or server queue length. The gateway is a local learning implementation, without
+an authentication or TLS layer; it binds to loopback by default.
 
 ## Decisions
 
@@ -22,8 +75,8 @@ inter-token latency, GPU utilization, server queue length or user-perceived appl
   bodies support independent reanalysis. Tests simulate failures; fabricated responses
   stay in tests and never become measured PoC results.
 - **No retry policy in the baseline.** Retries hide upstream failures and multiply
-  work. A later gateway should evaluate bounded deadlines and retry eligibility
-  against this baseline, considering cancellation and duplicate generation cost.
+  work. The gateway also disables retries. Future retry eligibility must consider
+  cancellation behavior and the cost of duplicate generation.
 
 ## Next design gate
 

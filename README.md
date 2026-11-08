@@ -25,36 +25,74 @@ the system rather than declare it production-ready.
   [analysis](labs/01-ollama/docs/analysis.md), and [customer PoC report](labs/01-ollama/docs/poc-report.md).
 
 **Milestone 2 is in progress:** [gateway design and engineering insights](labs/02-gateway/README.md).
-The gateway draft has not yet passed integration validation.
+Forwarding, error handling, admission rejection, and recovery have automated coverage.
+Health/readiness, recovery after model availability changes, and response/log request-ID
+correlation also have automated coverage. The full suite contains 31 tests.
 
-Current verified data path:
+### Current local architecture
 
-```text
-Python load generator -> localhost:11434/api/generate -> Ollama / local model
-         |                                                   |
-         +---- raw responses, HTTP outcomes and timing ------+
-                                   |
-                            JSON / offline analysis
+```mermaid
+flowchart LR
+    C["Client: curl / Python load generator"]
+    subgraph Mac["Apple Silicon Mac — current deployment"]
+        G["Python aiohttp gateway :8080"]
+        H["GET /healthz: gateway responds"]
+        R["GET /readyz: upstream reachable + model installed"]
+        A["POST /api/generate: validate + admission + deadline"]
+        O["Ollama :11434"]
+        M["Local model: llama3.2:1b"]
+        L["Structured request logs"]
+        G --> H
+        G --> R
+        G --> A
+        R -->|"GET /api/tags"| O
+        A -->|"Accepted non-streaming request"| O
+        O --> M
+        G --> L
+    end
+    C -->|"HTTP"| G
+    C -.->|"Direct benchmark; bypasses gateway controls"| O
 ```
+
+The gateway controls requests; Ollama executes the model. Both run locally, without
+Kubernetes or cloud infrastructure. `/healthz` does not contact Ollama. `/readyz`
+checks connectivity and installation, not model residency or a successful generation.
+Inference responses return through the gateway; the diagram shows request direction.
+
+With `--max-inflight 1`, an overlapping request receives 429 without reaching Ollama.
+Slots are released after success or failure. This is a per-process gateway limit,
+not a verified count of backend generations after a timeout. There are no automatic
+retries. See [component boundaries and request sequence](docs/architecture.md).
 
 ## Quick start
 
-Python 3.10+ and a running Ollama installation with `llama3.2:1b` are required for live runs.
-Tests require only Python and do not connect to a model. No Python packages need installing.
+Use Python 3.12 for the gateway and full test suite (the benchmark alone uses the
+standard library). Live runs require Ollama with `llama3.2:1b`. Automated tests use
+controlled local HTTP servers and do not require a live model.
 
 ```bash
 # Start Ollama using its desktop app (or ollama serve if no server is running).
 ollama list
 # If the model is absent, explicitly download it before the experiment:
 ollama pull llama3.2:1b
-make check
+python3.12 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+make check PYTHON=.venv/bin/python
 python3 labs/01-ollama/cold_warm.py
 python3 labs/01-ollama/concurrency.py
 # Substitute the run directory printed by the concurrency command:
 python3 labs/01-ollama/analyze.py labs/01-ollama/results/runs/<run-directory>
 ```
 
-Each invocation creates a new directory; it never replaces an earlier result. Cold
+Start the gateway from the repository root in a separate terminal:
+
+```bash
+.venv/bin/python -m gateway --max-inflight 1 --timeout 60
+curl -i http://127.0.0.1:8080/healthz
+curl -i http://127.0.0.1:8080/readyz
+```
+
+Each benchmark invocation creates a new directory; it never replaces an earlier result. Cold
 measurements unload the selected model: run on an idle, dedicated local server.
 See the experiment guide for flags, output fields, failure handling, and code decisions.
 
@@ -84,7 +122,7 @@ claim that a kind container has access to Metal acceleration.
 | Milestone | Entry condition / intended evidence | Status |
 |---|---|---|
 | 1. Ollama baseline | Repeated raw measurements and reproducible analysis | Implemented; see PoC for executed results and limitations |
-| 2. Gateway/router | Timeout contract, upstream health, error mapping; compare against direct baseline | Planned |
+| 2. Gateway/router | Timeout contract, upstream health, error mapping; compare against direct baseline | In progress; local gateway and failure/admission tests implemented |
 | 3. Local Kubernetes | Deploy suitable components; verify networking and readiness | Planned |
 | 4. Observability | Define latency/error/throughput SLIs, then Prometheus/Grafana | Planned |
 | 5. Controlled vLLM experiment | NVIDIA hardware, equivalent workload and explicit cost envelope | Planned |
