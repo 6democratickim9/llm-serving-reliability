@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "kind": "concurrency",
+  "started_at": "2026-11-12T14:11:20.135793+00:00",
+  "status": "completed",
+  "configuration": {
+    "model": "llama3.2:1b",
+    "base_url": "http://127.0.0.1:11434",
+    "prompt": "Explain Kubernetes readiness probes in three sentences.",
+    "num_predict": 128,
+    "seed": 42,
+    "temperature": 0,
+    "num_ctx": 4096,
+    "timeout": 65.0,
+    "repeats": 3,
+    "output_dir": "labs/01-ollama/results/runs/day4-direct",
+    "notes": "Day 4: direct Ollama, concurrency 1, first comparison pass",
+    "requests": 12,
+    "concurrency": [
+      1
+    ]
+  },
+  "request_payload": {
+    "model": "llama3.2:1b",
+    "prompt": "Explain Kubernetes readiness probes in three sentences.",
+    "stream": false,
+    "keep_alive": "10m",
+    "options": {
+      "temperature": 0,
+      "seed": 42,
+      "num_predict": 128,
+      "num_ctx": 4096
+    }
+  },
+  "retries": 0,
+  "runs": [
+    {
+      "repeat": 1,
+      "concurrency": 1,
+      "started_at": "2026-11-12T14:11:23.121702+00:00",
+      "summary": {
+        "attempted": 12,
+        "successful": 12,
+        "failed": 0,
+        "latency_population": "successful requests only",
+        "p50_ms": 1116.3081669947132,
+        "p95_ms": 1154.0792750252876,
+        "duration_seconds": 13.46408799989149,
+        "attempted_requests_per_sec": 0.8912597719278655,
+        "requests_per_sec": 0.8912597719278655,
+        "output_tokens": 1392,
+        "output_tokens_per_sec": 103.3861335436324,
+        "error_rate": 0.0
+      }
+    },
+    {
+      "repeat": 2,
+      "concurrency": 1,
+      "started_at": "2026-11-12T14:11:37.693510+00:00",
+      "summary": {
+        "attempted": 12,
+        "successful": 12,
+        "failed": 0,
+        "latency_population": "successful requests only",
+        "p50_ms": 1156.8711455329321,
+        "p95_ms": 1263.7801392469555,
+        "duration_seconds": 14.033770165988244,
+        "attempted_requests_per_sec": 0.85508027123622,
+        "requests_per_sec": 0.85508027123622,
+        "output_tokens": 1392,
+        "output_tokens_per_sec": 99.18931146340152,
+        "error_rate": 0.0
+      }
+    },
+    {
+      "repeat": 3,
+      "concurrency": 1,
+      "started_at": "2026-11-12T14:11:52.927041+00:00",
+      "summary": {
+        "attempted": 12,
+        "successful": 12,
+        "failed": 0,
+        "latency_population": "successful requests only",
+        "p50_ms": 1116.0185829503462,
+        "p95_ms": 1143.5335515940096,
+        "duration_seconds": 13.440016124979593,
+        "attempted_requests_per_sec": 0.8928560716305108,
+        "requests_per_sec": 0.8928560716305108,
+        "output_tokens": 1392,
+        "output_tokens_per_sec": 103.57130430913925,
+        "error_rate": 0.0
+      }
+    }
+  ],
+  "finished_at": "2026-11-12T14:12:06.367793+00:00",
+  "error": null
+}

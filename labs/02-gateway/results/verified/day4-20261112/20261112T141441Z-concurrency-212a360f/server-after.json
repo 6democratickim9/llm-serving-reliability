@@ -1,0 +1,13 @@
+{
+  "started_at": "2026-11-12T14:14:41.901418+00:00",
+  "http_status": null,
+  "success": false,
+  "error": {
+    "type": "URLError",
+    "message": "<urlopen error [Errno 61] Connection refused>"
+  },
+  "raw_body_base64": null,
+  "response": null,
+  "metrics": null,
+  "latency_ms": 0.14462496619671583
+}

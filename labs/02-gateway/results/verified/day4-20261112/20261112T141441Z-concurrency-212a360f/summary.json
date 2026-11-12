@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "kind": "concurrency",
+  "started_at": "2026-11-12T14:14:41.838537+00:00",
+  "status": "aborted",
+  "configuration": {
+    "model": "llama3.2:1b",
+    "base_url": "http://127.0.0.1:8080",
+    "prompt": "Explain Kubernetes readiness probes in three sentences.",
+    "num_predict": 128,
+    "seed": 42,
+    "temperature": 0,
+    "num_ctx": 4096,
+    "timeout": 65.0,
+    "repeats": 3,
+    "output_dir": "labs/01-ollama/results/runs/day4-gateway",
+    "notes": "Day 4: gateway, max-inflight 1, upstream timeout 60s, concurrency 1",
+    "requests": 12,
+    "concurrency": [
+      1
+    ]
+  },
+  "request_payload": {
+    "model": "llama3.2:1b",
+    "prompt": "Explain Kubernetes readiness probes in three sentences.",
+    "stream": false,
+    "keep_alive": "10m",
+    "options": {
+      "temperature": 0,
+      "seed": 42,
+      "num_predict": 128,
+      "num_ctx": 4096
+    }
+  },
+  "retries": 0,
+  "runs": [],
+  "finished_at": "2026-11-12T14:14:41.901409+00:00",
+  "error": "RuntimeError: warmup-r1-c1 failed: {'type': 'URLError', 'message': '<urlopen error [Errno 61] Connection refused>'}"
+}

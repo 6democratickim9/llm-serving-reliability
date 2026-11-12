@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "kind": "concurrency",
+  "started_at": "2026-11-12T14:19:04.516302+00:00",
+  "status": "completed",
+  "configuration": {
+    "model": "llama3.2:1b",
+    "base_url": "http://127.0.0.1:11434",
+    "prompt": "Explain Kubernetes readiness probes in three sentences.",
+    "num_predict": 128,
+    "seed": 42,
+    "temperature": 0,
+    "num_ctx": 4096,
+    "timeout": 65.0,
+    "repeats": 3,
+    "output_dir": "labs/01-ollama/results/runs/day4-direct-load",
+    "notes": "Day 4: direct Ollama, client concurrency 2 and 4",
+    "requests": 12,
+    "concurrency": [
+      2,
+      4
+    ]
+  },
+  "request_payload": {
+    "model": "llama3.2:1b",
+    "prompt": "Explain Kubernetes readiness probes in three sentences.",
+    "stream": false,
+    "keep_alive": "10m",
+    "options": {
+      "temperature": 0,
+      "seed": 42,
+      "num_predict": 128,
+      "num_ctx": 4096
+    }
+  },
+  "retries": 0,
+  "runs": [
+    {
+      "repeat": 1,
+      "concurrency": 2,
+      "started_at": "2026-11-12T14:19:05.776834+00:00",
+      "summary": {
+        "attempted": 12,
+        "successful": 12,
+        "failed": 0,
+        "latency_population": "successful requests only",
+        "p50_ms": 2220.4108755104244,
+        "p95_ms": 2243.2788563717622,
+        "duration_seconds": 13.348538833088242,
+        "attempted_requests_per_sec": 0.8989747979197922,
+        "requests_per_sec": 0.8989747979197922,
+        "output_tokens": 1392,
+        "output_tokens_per_sec": 104.28107655869589,
+        "error_rate": 0.0
+      }
+    },
+    {
+      "repeat": 1,
+      "concurrency": 4,
+      "started_at": "2026-11-12T14:19:20.235810+00:00",
+      "summary": {
+        "attempted": 12,
+        "successful": 12,
+        "failed": 0,
+        "latency_population": "successful requests only",
+        "p50_ms": 4442.590041959193,
+        "p95_ms": 4459.565235720947,
+        "duration_seconds": 13.359246750012971,
+        "attempted_requests_per_sec": 0.8982542372748934,
+        "requests_per_sec": 0.8982542372748934,
+        "output_tokens": 1392,
+        "output_tokens_per_sec": 104.19749152388763,
+        "error_rate": 0.0
+      }
+    },
+    {
+      "repeat": 2,
+      "concurrency": 4,
+      "started_at": "2026-11-12T14:19:34.707641+00:00",
+      "summary": {
+        "attempted": 12,
+        "successful": 12,
+        "failed": 0,
+        "latency_population": "successful requests only",
+        "p50_ms": 4552.906499535311,
+        "p95_ms": 4584.871620807098,
+        "duration_seconds": 13.66988779103849,
+        "attempted_requests_per_sec": 0.8778418801555041,
+        "requests_per_sec": 0.8778418801555041,
+        "output_tokens": 1392,
+        "output_tokens_per_sec": 101.82965809803848,
+        "error_rate": 0.0
+      }
+    },
+    {
+      "repeat": 2,
+      "concurrency": 2,
+      "started_at": "2026-11-12T14:19:49.520357+00:00",
+      "summary": {
+        "attempted": 12,
+        "successful": 12,
+        "failed": 0,
+        "latency_population": "successful requests only",
+        "p50_ms": 2312.7384374965914,
+        "p95_ms": 2394.90264361375,
+        "duration_seconds": 13.972305916016921,
+        "attempted_requests_per_sec": 0.8588417740155545,
+        "requests_per_sec": 0.8588417740155545,
+        "output_tokens": 1392,
+        "output_tokens_per_sec": 99.62564578580432,
+        "error_rate": 0.0
+      }
+    },
+    {
+      "repeat": 3,
+      "concurrency": 2,
+      "started_at": "2026-11-12T14:20:04.672516+00:00",
+      "summary": {
+        "attempted": 12,
+        "successful": 12,
+        "failed": 0,
+        "latency_population": "successful requests only",
+        "p50_ms": 2317.82643700717,
+        "p95_ms": 2355.640504299663,
+        "duration_seconds": 13.95378833299037,
+        "attempted_requests_per_sec": 0.8599815128074496,
+        "requests_per_sec": 0.8599815128074496,
+        "output_tokens": 1392,
+        "output_tokens_per_sec": 99.75785548566417,
+        "error_rate": 0.0
+      }
+    },
+    {
+      "repeat": 3,
+      "concurrency": 4,
+      "started_at": "2026-11-12T14:20:19.789408+00:00",
+      "summary": {
+        "attempted": 12,
+        "successful": 12,
+        "failed": 0,
+        "latency_population": "successful requests only",
+        "p50_ms": 4653.232520446181,
+        "p95_ms": 4684.056306286948,
+        "duration_seconds": 13.991515917005017,
+        "attempted_requests_per_sec": 0.8576626057663582,
+        "requests_per_sec": 0.8576626057663582,
+        "output_tokens": 1392,
+        "output_tokens_per_sec": 99.48886226889755,
+        "error_rate": 0.0
+      }
+    }
+  ],
+  "finished_at": "2026-11-12T14:20:33.781764+00:00",
+  "error": null
+}

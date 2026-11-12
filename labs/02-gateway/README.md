@@ -114,7 +114,7 @@ allows the gateway to receive the request and exercise its error handling.
 ### Remaining validation
 
 - Admission limits greater than one, cancellation behavior, and readiness probe timeout/malformed-response cases.
-- Direct-versus-gateway performance comparison under an equivalent workload.
+- Sustained arrival-rate experiments and bounded-queue policy comparison (see Day 4 findings).
 
 
 ## Day 2: Admission control and recovery
@@ -227,3 +227,14 @@ make check PYTHON=.venv/bin/python
 The complete verification runs 31 tests, the legacy shell script syntax check,
 and `git diff --check`. Probe deadline behavior, malformed model metadata, and
 privacy assertions on inference logs remain candidates for further tests.
+
+
+## Day 4: Measured direct-versus-gateway comparison
+
+[PoC report, results and reproduction commands](docs/day4-comparison.md).
+Direct throughput stayed near 0.87–0.88 successful requests/s as concurrency rose
+from 1 to 4, while latency increased. With one active gateway slot, overloaded
+batches rejected 91.7% of attempts. All completed-run failures were HTTP 429.
+These observations demonstrate admission policy, not increased inference capacity.
+Raw evidence, the excluded setup failure and hash-checked offline reanalysis are
+preserved under `results/verified/day4-20261112/`.

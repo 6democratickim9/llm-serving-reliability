@@ -1,0 +1,139 @@
+{
+  "results": [
+    {
+      "route": "direct",
+      "concurrency": 1,
+      "attempted": 36,
+      "successful": 36,
+      "failed": 0,
+      "latency_population": "successful requests only",
+      "p50_ms": 1117.6162915071473,
+      "p95_ms": 1233.014083263697,
+      "duration_seconds": 40.93787429085933,
+      "attempted_requests_per_sec": 0.8793812728092268,
+      "requests_per_sec": 0.8793812728092268,
+      "output_tokens": 4176,
+      "output_tokens_per_sec": 102.00822764587032,
+      "error_rate": 0.0,
+      "http_status_counts": {
+        "200": 36
+      },
+      "rejected_429": 0,
+      "rejection_rate": 0.0,
+      "other_failures": 0
+    },
+    {
+      "route": "gateway",
+      "concurrency": 1,
+      "attempted": 36,
+      "successful": 36,
+      "failed": 0,
+      "latency_population": "successful requests only",
+      "p50_ms": 1123.844999470748,
+      "p95_ms": 1157.5316357484553,
+      "duration_seconds": 40.636310541885905,
+      "attempted_requests_per_sec": 0.8859071977731092,
+      "requests_per_sec": 0.8859071977731092,
+      "output_tokens": 4176,
+      "output_tokens_per_sec": 102.76523494168067,
+      "error_rate": 0.0,
+      "http_status_counts": {
+        "200": 36
+      },
+      "rejected_429": 0,
+      "rejection_rate": 0.0,
+      "other_failures": 0
+    },
+    {
+      "route": "direct",
+      "concurrency": 2,
+      "attempted": 36,
+      "successful": 36,
+      "failed": 0,
+      "latency_population": "successful requests only",
+      "p50_ms": 2298.7501870375127,
+      "p95_ms": 2355.6031876942143,
+      "duration_seconds": 41.274633082095534,
+      "attempted_requests_per_sec": 0.8722064210333681,
+      "requests_per_sec": 0.8722064210333681,
+      "output_tokens": 4176,
+      "output_tokens_per_sec": 101.1759448398707,
+      "error_rate": 0.0,
+      "http_status_counts": {
+        "200": 36
+      },
+      "rejected_429": 0,
+      "rejection_rate": 0.0,
+      "other_failures": 0
+    },
+    {
+      "route": "direct",
+      "concurrency": 4,
+      "attempted": 36,
+      "successful": 36,
+      "failed": 0,
+      "latency_population": "successful requests only",
+      "p50_ms": 4497.560312971473,
+      "p95_ms": 4682.196937792469,
+      "duration_seconds": 41.02065045805648,
+      "attempted_requests_per_sec": 0.8776067565483857,
+      "requests_per_sec": 0.8776067565483857,
+      "output_tokens": 4176,
+      "output_tokens_per_sec": 101.80238375961274,
+      "error_rate": 0.0,
+      "http_status_counts": {
+        "200": 36
+      },
+      "rejected_429": 0,
+      "rejection_rate": 0.0,
+      "other_failures": 0
+    },
+    {
+      "route": "gateway",
+      "concurrency": 2,
+      "attempted": 36,
+      "successful": 3,
+      "failed": 33,
+      "latency_population": "successful requests only",
+      "p50_ms": 1114.9250830058008,
+      "p95_ms": 1119.6083464077674,
+      "duration_seconds": 3.3517522090114653,
+      "attempted_requests_per_sec": 10.740650786538158,
+      "requests_per_sec": 0.895054232211513,
+      "output_tokens": 348,
+      "output_tokens_per_sec": 103.82629093653551,
+      "error_rate": 0.9166666666666666,
+      "http_status_counts": {
+        "429": 33,
+        "200": 3
+      },
+      "rejected_429": 33,
+      "rejection_rate": 0.9166666666666666,
+      "other_failures": 0
+    },
+    {
+      "route": "gateway",
+      "concurrency": 4,
+      "attempted": 36,
+      "successful": 3,
+      "failed": 33,
+      "latency_population": "successful requests only",
+      "p50_ms": 1139.297290937975,
+      "p95_ms": 1173.6236663069576,
+      "duration_seconds": 3.4410331660183147,
+      "attempted_requests_per_sec": 10.461974140649243,
+      "requests_per_sec": 0.8718311783874368,
+      "output_tokens": 348,
+      "output_tokens_per_sec": 101.13241669294268,
+      "error_rate": 0.9166666666666666,
+      "http_status_counts": {
+        "429": 33,
+        "200": 3
+      },
+      "rejected_429": 33,
+      "rejection_rate": 0.9166666666666666,
+      "other_failures": 0
+    }
+  ],
+  "notes": "Warmups excluded. RPS uses successes divided by summed batch durations. Successful-request percentiles only; gateway load groups have only three successful samples each. Fixed batches do not establish sustained capacity."
+}

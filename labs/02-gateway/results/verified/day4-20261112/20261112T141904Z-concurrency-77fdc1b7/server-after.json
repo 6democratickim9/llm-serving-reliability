@@ -1,0 +1,33 @@
+{
+  "started_at": "2026-11-12T14:20:33.781777+00:00",
+  "http_status": 200,
+  "success": true,
+  "error": null,
+  "raw_body_base64": "eyJtb2RlbHMiOlt7Im5hbWUiOiJsbGFtYTMuMjoxYiIsIm1vZGVsIjoibGxhbWEzLjI6MWIiLCJzaXplIjoxNTE4Nzc4NDQ5LCJkaWdlc3QiOiJiYWY2YTc4N2ZkZmZkNjMzNTM3YWEyZWI1MWNmZDU0Y2I5M2ZmMDhlMjgwNDAwOTU0NjJiYjYzZGFmNTUyODc4IiwiZGV0YWlscyI6eyJwYXJlbnRfbW9kZWwiOiIiLCJmb3JtYXQiOiJnZ3VmIiwiZmFtaWx5IjoibGxhbWEiLCJmYW1pbGllcyI6WyJsbGFtYSJdLCJwYXJhbWV0ZXJfc2l6ZSI6IjEuMkIiLCJxdWFudGl6YXRpb25fbGV2ZWwiOiJROF8wIn0sImV4cGlyZXNfYXQiOiIyMDI2LTExLTEyVDIzOjMwOjMzLjc4MDIxOSswOTowMCIsInNpemVfdnJhbSI6MTUxODc3ODQ0OSwiY29udGV4dF9sZW5ndGgiOjQwOTYsInJ1bm5lciI6ImxsYW1hY3BwIn1dfQ==",
+  "response": {
+    "models": [
+      {
+        "name": "llama3.2:1b",
+        "model": "llama3.2:1b",
+        "size": 1518778449,
+        "digest": "baf6a787fdffd633537aa2eb51cfd54cb93ff08e28040095462bb63daf552878",
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "llama",
+          "families": [
+            "llama"
+          ],
+          "parameter_size": "1.2B",
+          "quantization_level": "Q8_0"
+        },
+        "expires_at": "2026-11-12T23:30:33.780219+09:00",
+        "size_vram": 1518778449,
+        "context_length": 4096,
+        "runner": "llamacpp"
+      }
+    ]
+  },
+  "metrics": null,
+  "latency_ms": 0.6937920115888119
+}

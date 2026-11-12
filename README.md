@@ -29,6 +29,11 @@ Forwarding, error handling, admission rejection, and recovery have automated cov
 Health/readiness, recovery after model availability changes, and response/log request-ID
 correlation also have automated coverage. The full suite contains 31 tests.
 
+[Day 4 comparison report](labs/02-gateway/docs/day4-comparison.md) now includes
+raw direct/gateway experiments: similar serial throughput, higher direct-call
+latency under concurrency, and explicit gateway rejection rates. These are local
+fixed-batch observations, not a production capacity or SLO claim.
+
 ### Current local architecture
 
 ```mermaid

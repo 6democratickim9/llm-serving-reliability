@@ -1,0 +1,96 @@
+{
+  "captured_at": "2026-11-12T14:14:41.860725+00:00",
+  "platform": "macOS-27.0.1-arm64-arm-64bit",
+  "machine": "arm64",
+  "python": "3.12.15",
+  "logical_cpu_count": 8,
+  "hardware": {
+    "returncode": 0,
+    "stdout": "Apple M1 Pro\n17179869184",
+    "stderr": ""
+  },
+  "git_head": {
+    "returncode": 0,
+    "stdout": "e5cccd852b14d4af03fab09290ead59b8db58e16",
+    "stderr": ""
+  },
+  "git_status": {
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "source_sha256": {
+    "concurrency.py": "f47b80ba1e60d7af100dd3a18605d21f276b1d40233c1dc5812561f44aa9a125",
+    "cold_warm.py": "52fce998438a5024664267d74d73032967db6ad7586e700cdc45eb2e2736ad9d",
+    "concurency.py": "b1fb52078b8572831c5cfe0cf3712ba81b4bd96a280b8d5fa8205a1376d327b8",
+    "benchlib.py": "d361850db741bfd23935b3f6c21a67cd8d0962c3acc55fc117ed81a8f56c846d",
+    "analyze.py": "52c1719f4db4b5009554ec50517510e735ccc8e4e5dfbb895052c7dc3b97ef0f"
+  },
+  "client_environment_only": {
+    "OLLAMA_NUM_PARALLEL": null,
+    "OLLAMA_MAX_LOADED_MODELS": null,
+    "OLLAMA_MAX_QUEUE": null,
+    "OLLAMA_CONTEXT_LENGTH": null,
+    "OLLAMA_FLASH_ATTENTION": null,
+    "OLLAMA_KV_CACHE_TYPE": null
+  },
+  "server_parallelism": {
+    "effective_OLLAMA_NUM_PARALLEL": null,
+    "verification": "unknown; client environment is not server evidence"
+  },
+  "operator_notes": "Day 4: gateway, max-inflight 1, upstream timeout 60s, concurrency 1",
+  "api": {
+    "version": {
+      "started_at": "2026-11-12T14:14:41.838988+00:00",
+      "http_status": null,
+      "success": false,
+      "error": {
+        "type": "URLError",
+        "message": "<urlopen error [Errno 61] Connection refused>"
+      },
+      "raw_body_base64": null,
+      "response": null,
+      "metrics": null,
+      "latency_ms": 21.252833073958755
+    },
+    "tags": {
+      "started_at": "2026-11-12T14:14:41.860250+00:00",
+      "http_status": null,
+      "success": false,
+      "error": {
+        "type": "URLError",
+        "message": "<urlopen error [Errno 61] Connection refused>"
+      },
+      "raw_body_base64": null,
+      "response": null,
+      "metrics": null,
+      "latency_ms": 0.18216599710285664
+    },
+    "ps": {
+      "started_at": "2026-11-12T14:14:41.860442+00:00",
+      "http_status": null,
+      "success": false,
+      "error": {
+        "type": "URLError",
+        "message": "<urlopen error [Errno 61] Connection refused>"
+      },
+      "raw_body_base64": null,
+      "response": null,
+      "metrics": null,
+      "latency_ms": 0.1414999132975936
+    },
+    "show": {
+      "started_at": "2026-11-12T14:14:41.860590+00:00",
+      "http_status": null,
+      "success": false,
+      "error": {
+        "type": "URLError",
+        "message": "<urlopen error [Errno 61] Connection refused>"
+      },
+      "raw_body_base64": null,
+      "response": null,
+      "metrics": null,
+      "latency_ms": 0.13108295388519764
+    }
+  }
+}

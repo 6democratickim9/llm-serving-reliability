@@ -1,0 +1,71 @@
+{
+  "runs": [
+    {
+      "directory": "20261112T141120Z-concurrency-d08ee629",
+      "original_path": "labs/01-ollama/results/runs/day4-direct/20261112T141120Z-concurrency-d08ee629",
+      "route": "direct",
+      "include_in_comparison": true,
+      "exclusion_reason": null,
+      "sha256": {
+        "environment.json": "7fe4168dca2597df7a6b770fd3870a39e9afd84b839909df6ff11ec26eb4c82e",
+        "requests.jsonl": "1914e5d4579d769f0f527d1cfdbe7b1caa58026a430915bfec8e3afc3d028612",
+        "server-after.json": "5493464552496ba7d0c2f85c45e9b2a134894c89fb18dc745e4e6028e556bded",
+        "summary.json": "b844fe895aed576eda3e6a0b93b0084ea2f7d853f2ff0f280b2b3fadf77b05e7"
+      }
+    },
+    {
+      "directory": "20261112T141441Z-concurrency-212a360f",
+      "original_path": "labs/01-ollama/results/runs/day4-gateway/20261112T141441Z-concurrency-212a360f",
+      "route": "gateway",
+      "include_in_comparison": false,
+      "exclusion_reason": "Gateway stopped before warmup; connection refused, no completed measurement batch.",
+      "sha256": {
+        "environment.json": "cb1b2d9f7452fed411ec942480a775559fc3002f237bb15f9d8192e657aa3273",
+        "requests.jsonl": "a01b9f73ae0a6c6a2619bdffce66981bf202ba38c334dea8e61ccaa582fad0f2",
+        "server-after.json": "2b4fa57520e7bc7b87c34b09b0d1b362be4a54959e15bc4cb6f3df6930b8b43c",
+        "summary.json": "15086dc864bd2ef416d7cb823958eabcb2ac67a52f17b497ffb510a51a269237"
+      }
+    },
+    {
+      "directory": "20261112T141524Z-concurrency-a326d90c",
+      "original_path": "labs/01-ollama/results/runs/day4-gateway/20261112T141524Z-concurrency-a326d90c",
+      "route": "gateway",
+      "include_in_comparison": true,
+      "exclusion_reason": null,
+      "sha256": {
+        "environment.json": "7c04c3885553216d6171b22c91576bc8a3b0ea73153bdc7ae98a5e8ba9e882a8",
+        "requests.jsonl": "8284fb517786a4cca793dbca1c44aafbbc56f153c10b75c6228ddf1ef7219af8",
+        "server-after.json": "5841c07b768dc8caf4142a9b89d6948be76486bc01ec717c5841990be8cea0b9",
+        "summary.json": "44fe90608aa8863a0128bb2ee8e4745c94504aae0b9fe7f53d477f00e3fcfa69"
+      }
+    },
+    {
+      "directory": "20261112T141904Z-concurrency-77fdc1b7",
+      "original_path": "labs/01-ollama/results/runs/day4-direct-load/20261112T141904Z-concurrency-77fdc1b7",
+      "route": "direct",
+      "include_in_comparison": true,
+      "exclusion_reason": null,
+      "sha256": {
+        "environment.json": "dec19dec78aeb98c7d364597866be37397199def2b2202b9b8461091a990a115",
+        "requests.jsonl": "1b269ece42f04082c2c761cb7bc4f4867998fefeef1890c25d6c972c31d3f225",
+        "server-after.json": "52bf8c96d0a00d5ee61a1aa017e11c43dc8826f42049639c2851526e00e5fc6c",
+        "summary.json": "13390f8228804ce65fac53b7ab79fe9c99c40f920bc9bbde63595ed36c099463"
+      }
+    },
+    {
+      "directory": "20261112T142706Z-concurrency-ab8b5ea4",
+      "original_path": "labs/01-ollama/results/runs/day4-gateway-load/20261112T142706Z-concurrency-ab8b5ea4",
+      "route": "gateway",
+      "include_in_comparison": true,
+      "exclusion_reason": null,
+      "sha256": {
+        "environment.json": "f853b4d6f90f698ecc2b82302401d956a8aa7c4aa37b2e9c4be018384ddf797d",
+        "requests.jsonl": "da61086fa02d5941d26a71358426e70f8a80aefe9c1265e1bded892c8e146db7",
+        "server-after.json": "4c13aa5c4b33a708bfa6d3af16c6cb7b91bbcd83696cdf8146b0cb5d1ea21750",
+        "summary.json": "154238f39e522e4f4d6a8096c96cd49cd990057ca0d96c01c342de7d874b528c"
+      }
+    }
+  ],
+  "gateway_configuration": "Operator command: max-inflight=1, upstream timeout=60s. Not queried via a configuration endpoint.",
+  "source_note": "Raw files copied byte-for-byte from owner-executed local runs; original paths retained in metadata."
+}
